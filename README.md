@@ -176,7 +176,7 @@ Both RGB and HSL pickers use WebGPU shaders to render smooth and performant colo
 
 ### DOM: hyperscript (`h()`)
 
-To simplify DOM creation without using JSX or innerHTML, I use a little `h()` utility:
+To simplify DOM creation without using JSX or innerHTML, I use a little `h()` utility.
 
 ```ts
 const slider = h("div", { className: "slider" }, thumb);
@@ -186,11 +186,11 @@ This improves readability, modularity, and keeps everything in native DOM land.
 
 ### Interaction
 
-All user interactions are abstracted via the `Interactor` utility, handling pointer events and clamping:
+All user interactions are abstracted via the `Interactor` utility, handling pointer events and clamping.
 
 ### Indicator
 
-Custom thumb indicator (`div`) that follows interaction and reflects color:
+Custom thumb indicator (`div`) that follows interaction and reflects color.
 
 ---
 
