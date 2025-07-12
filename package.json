@@ -1,0 +1,26 @@
+{
+  "name": "color-picker-webgpu",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/color-picker-webgpu.es.js",
+      "require": "./dist/color-picker-webgpu.umd.js"
+    }
+  },
+  "style": "dist/color-picker-webgpu.css",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "build:demo": "vite build --config demo.vite.config.ts",
+    "preview:demo": "vite preview --config demo.vite.config.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.13",
+    "@webgpu/types": "^0.1.64",
+    "typescript": "~5.8.3",
+    "vite": "^7.0.4"
+  }
+}
