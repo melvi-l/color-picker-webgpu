@@ -1,0 +1,50 @@
+.picker-container {
+  position: relative;
+}
+.indicator {
+  position: absolute;
+  outline-style: solid;
+  outline-color: #fff;
+  border-radius: 50%;
+}
+
+.hue-slider-wrapper,
+.luminance-slider-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.hue-slider-track,
+.luminance-slider-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.hue-slider-gradient {
+  position: absolute;
+  top: 12px;
+  height: 8px;
+  width: 100%;
+  border-radius: 20px;
+  background: linear-gradient(
+    to right,
+    hsl(0, 100%, 50%),
+    hsl(60, 100%, 50%),
+    hsl(120, 100%, 50%),
+    hsl(180, 100%, 50%),
+    hsl(240, 100%, 50%),
+    hsl(300, 100%, 50%),
+    hsl(360, 100%, 50%)
+  );
+}
+
+.luminance-slider-gradient {
+  position: absolute;
+  top: 12px;
+  height: 8px;
+  width: 100%;
+  border-radius: 20px;
+  background: linear-gradient(to right, black, white);
+}
