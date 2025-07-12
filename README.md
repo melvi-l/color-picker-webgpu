@@ -1,3 +1,5 @@
+![NPM Version](https://img.shields.io/npm/v/color-picker-webgpu?labelColor=%23F1F1F1&color=%23CC3534)
+
 # color-picker-webgpu
 
 Basically just component for my [node-editor-webgpu](https://github.com/melvi-l/node-editor-webgpu), not really intended or ready for production (nor development tbh), but feel free to browse the source code take the code and knowledge you find relevent.
