@@ -1,6 +1,6 @@
 # color-picker-webgpu
 
-Basically just component for my [node-editor-webgpu], not really intended or ready for production (nor development tbh), but feel free to browse the source code take the code and knowledge you find relevent.
+Basically just component for my [node-editor-webgpu](https://github.com/melvi-l/node-editor-webgpu), not really intended or ready for production (nor development tbh), but feel free to browse the source code take the code and knowledge you find relevent.
 
 Just wanted to learn more on some module development stuff and practice all the github pipeline and npm release stuff because, hey, is there a bad pretext to learn and practice ?
 
