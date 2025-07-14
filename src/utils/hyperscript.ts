@@ -1,4 +1,4 @@
-export function h<K extends keyof HTMLElementTagNameMap>(
+export function d<K extends keyof HTMLElementTagNameMap>(
   tag: K,
   attrs: Partial<HTMLElementTagNameMap[K]> = {},
   ...children: (HTMLElement | string)[]

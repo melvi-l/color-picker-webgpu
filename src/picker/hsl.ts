@@ -2,79 +2,152 @@ import { hslRenderer } from "../renderer/hslRenderer";
 
 import { Indicator } from "../utils/indicator";
 import { Interactor } from "../utils/interactor";
-import { h } from "../utils/hyperscript";
+import { d } from "../utils/hyperscript";
 import { hslToRgb } from "../utils/color";
 
 export interface HSLOptions {
-    canvas?: HTMLCanvasElement;
-    width: number;
-    height: number;
-    onPick?: (color: { r: number; g: number; b: number }) => void;
-    initialHue?: number;
+  canvas?: HTMLCanvasElement;
+  width: number;
+  height: number;
+  onPick?: (color: { r: number; g: number; b: number }) => void;
+  initialHue?: number;
 }
 
 export async function HSLPicker(options: HSLOptions) {
-    const { width, height, onPick, initialHue = 1.0 } = options;
+  const { width, height, onPick, initialHue = 1.0 } = options;
 
-    const canvas = options.canvas ?? h("canvas", { width, height });
-    canvas.width = width;
-    canvas.height = height;
+  const canvas = options.canvas ?? d("canvas", { width, height });
+  canvas.width = width;
+  canvas.height = height;
 
-    const indicator = Indicator();
+  const indicator = Indicator();
 
-    const container = h("div", { className: "picker-container" });
+  const container = d("div", { className: "picker-container" });
 
-    if (options.canvas) {
-        canvas.replaceWith(container);
-    }
+  if (options.canvas) {
+    canvas.replaceWith(container);
+  }
 
-    container.appendChild(canvas);
-    container.appendChild(indicator.element);
-    container.style.width = `${width}px`;
-    container.style.height = `${height}px`;
+  container.appendChild(canvas);
+  container.appendChild(indicator.element);
+  container.style.width = `${width}px`;
+  container.style.height = `${height}px`;
 
-    const { sync, render } = await hslRenderer(canvas);
+  const { sync, render } = await hslRenderer(canvas);
 
-    const removeListener = Interactor(container, ({ x, y }) => {
-        indicator.setPosition({ x, y });
+  const removeListener = Interactor(container, ({ x, y }) => {
+    indicator.setPosition({ x, y });
+
+    const color = positionToRgb(x, y);
+
+    indicator.setColor(color);
+    onPick?.(color);
+  });
+
+  function setHue(value: number) {
+    hue = Math.max(0, Math.min(1, value));
+
+    sync(hue);
+    render();
+
+    const { x, y } = indicator.getPosition();
+    const color = positionToRgb(x, y);
+
+    indicator.setColor(color);
+    onPick?.(color);
+  }
+
+  let hue = 0;
+  setHue(initialHue);
+
+  return {
+    element: container,
+    setHue,
+    render,
+    destroy() {
+      removeListener();
+      canvas.replaceWith(canvas.cloneNode(true));
+    },
+  };
+
+  function positionToRgb(x: number, y: number) {
+    const s = x / width;
+    const lTop = (1 - s) * 1 + s * 0.5; // linear interpolation to get that nice pure hue on the top-right corner (in the middle-right if not)
+    const l = (1 - y / width) * lTop;
+
+    return hslToRgb(hue, s, l);
+  }
+}
+
+import { h } from "kuai-ts";
+
+import { K_Indicator } from "../utils/indicator";
+
+export function K_HSLPicker(options: {
+  width: number;
+  height: number;
+  onPick?: (color: { r: number; g: number; b: number }) => void;
+  initialHue?: number;
+}) {
+  const { width, height, onPick, initialHue = 0.0 } = options;
+
+  let hue: number;
+
+  const indicator = K_Indicator();
+  const { getPosition, setPosition, setColor } = indicator.instance;
+
+  let sync: (luminance: number) => void;
+  let render: () => void;
+  const canvas = h("canvas.webgpu", {
+    width,
+    height,
+    ref: (dom) => {
+      Interactor(dom, ({ x, y }) => {
+        setPosition({ x, y });
 
         const color = positionToRgb(x, y);
 
-        indicator.setColor(color);
+        setColor(color);
         onPick?.(color);
-    });
-
-    function setHue(value: number) {
-        hue = Math.max(0, Math.min(1, value));
-
-        sync(hue);
-        render();
-
-        const { x, y } = indicator.getPosition();
-        const color = positionToRgb(x, y)
-
-        indicator.setColor(color);
-        onPick?.(color)
-    }
-
-    let hue = 0;
-    setHue(initialHue);
-
-    return {
-        element: container,
-        setHue,
-        render,
-        destroy() {
-            removeListener();
-            canvas.replaceWith(canvas.cloneNode(true));
+      });
+      hslRenderer(dom as HTMLCanvasElement).then(
+        ({ sync: _sync, render: _render }) => {
+          sync = _sync;
+          render = _render;
+          setHue(initialHue);
         },
-    };
+      );
+    },
+  });
 
-    function positionToRgb(x: number, y: number) {
-        const s = x / width;
-        const lTop = (1 - s) * 1 + s * 0.5; // linear interpolation to get that nice pure hue on the top-right corner (in the middle-right if not)
-        const l = (1 - y / width) * lTop;
+  function setHue(value: number) {
+    hue = Math.max(0, Math.min(1, value));
 
-        return hslToRgb(hue, s, l);
-    }
+    sync?.(hue);
+    render?.();
+
+    const { x, y } = getPosition();
+    const color = positionToRgb(x, y);
+
+    setColor(color);
+    onPick?.(color);
+  }
+  setHue(initialHue);
+
+  const vnode = h("div.picker-container", {}, [indicator.vnode, canvas]);
+
+  return {
+    vnode,
+    instance: {
+      setHue,
+    },
+  };
+
+  function positionToRgb(x: number, y: number) {
+    const s = x / width;
+    const lTop = (1 - s) * 1 + s * 0.5; // linear interpolation to get that nice pure hue on the top-right corner (in the middle-right if not)
+    const l = (1 - y / width) * lTop;
+
+    return hslToRgb(hue, s, l);
+  }
 }

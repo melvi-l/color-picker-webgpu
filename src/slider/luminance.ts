@@ -1,7 +1,7 @@
 import { Indicator } from "../utils/indicator";
 import { Interactor } from "../utils/interactor";
 
-import { h } from "../utils/hyperscript";
+import { d } from "../utils/hyperscript";
 
 export function LuminanceSlider(options: {
     container?: HTMLElement;
@@ -13,8 +13,8 @@ export function LuminanceSlider(options: {
 
     const thumb = Indicator();
 
-    const gradient = h("div", { className: "luminance-slider-gradient" });
-    const track = h(
+    const gradient = d("div", { className: "luminance-slider-gradient" });
+    const track = d(
         "div",
         {
             className: "luminance-slider-track",
@@ -27,7 +27,7 @@ export function LuminanceSlider(options: {
         thumb.element,
     );
 
-    const wrapper = h("div", { className: "luminance-slider-wrapper" }, track);
+    const wrapper = d("div", { className: "luminance-slider-wrapper" }, track);
     wrapper.style.height = `${height}px`;
     if (container) {
         container.appendChild(wrapper);
@@ -52,7 +52,7 @@ export function LuminanceSlider(options: {
         onChange?.(percent);
     });
 
-    setLuminance(initialLuminance); 
+    setLuminance(initialLuminance);
 
     return {
         element: wrapper,

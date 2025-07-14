@@ -1,8 +1,8 @@
 import { rgbRenderer } from "../renderer/rgbRenderer";
+import { d } from "../utils/hyperscript";
 
 import { Indicator } from "../utils/indicator";
 import { Interactor } from "../utils/interactor";
-import { h } from "../utils/hyperscript";
 
 export interface RGBOptions {
     canvas?: HTMLCanvasElement;
@@ -15,13 +15,13 @@ export interface RGBOptions {
 export async function RGBPicker(options: RGBOptions) {
     const { width, height, onPick, initialLuminance = 1.0 } = options;
 
-    const canvas = options.canvas ?? h("canvas", { width, height });
+    const canvas = options.canvas ?? d("canvas", { width, height });
     canvas.width = width;
     canvas.height = height;
 
     const indicator = Indicator();
 
-    const container = h("div", { className: "picker-container" });
+    const container = d("div", { className: "picker-container" });
 
     if (options.canvas) {
         canvas.replaceWith(container);
