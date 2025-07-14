@@ -4,22 +4,28 @@
   "type": "module",
   "exports": {
     ".": {
+      "types": "./dist/type.d.ts",
       "import": "./dist/color-picker-webgpu.es.js",
       "require": "./dist/color-picker-webgpu.umd.js"
-    }
+    },
+    "./type": "./dist/type.d.ts"
   },
-  "style": "dist/color-picker-webgpu.css",
+  "style": "dist/style.css",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && rollup -c",
     "preview": "vite preview",
     "build:demo": "vite build --config demo.vite.config.ts",
     "preview:demo": "vite preview --config demo.vite.config.ts",
     "release": "node scripts/release.js"
   },
+  "dependancies": {
+    "kuai-ts": "*"
+  },
   "devDependencies": {
     "@types/node": "^24.0.13",
     "@webgpu/types": "^0.1.64",
+    "rollup-plugin-dts": "^6.2.1",
     "typescript": "~5.8.3",
     "vite": "^7.0.4"
   }
