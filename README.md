@@ -1,4 +1,4 @@
-![NPM Version](https://img.shields.io/npm/v/color-picker-webgpu?labelColor=%23F1F1F1&color=%23CC3534)
+[![NPM Version](https://img.shields.io/npm/v/color-picker-webgpu?labelColor=%23F1F1F1&color=%23CC3534)](https://www.npmjs.com/package/color-picker-webgpu)
 
 # color-picker-webgpu
 
