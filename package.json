@@ -19,8 +19,8 @@
     "preview:demo": "vite preview --config demo.vite.config.ts",
     "release": "node scripts/release.js"
   },
-  "dependancies": {
-    "kuai-ts": "*"
+  "dependencies": {
+      "kuai-ts": "^0.2.0-dev"
   },
   "devDependencies": {
     "@types/node": "^24.0.13",
