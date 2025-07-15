@@ -8,6 +8,8 @@ Just wanted to learn more on some module development stuff and practice all the 
 
 > I, again, let my self sink into the project, forgetting to commit all along, so, sorry for the frail git history.
 
+It now use [kuai](https://github.com/melvi-l/kuai-ts), a little declarative VirtualDOM renderer library that I wrote. The available component are exported with a `K_` prefix.
+
 ---
 
 ## Features

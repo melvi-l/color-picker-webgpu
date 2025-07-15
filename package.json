@@ -1,6 +1,6 @@
 {
   "name": "color-picker-webgpu",
-  "version": "0.2.1-dev",
+  "version": "0.2.2-dev",
   "type": "module",
   "exports": {
     ".": {
@@ -25,7 +25,7 @@
     "release": "node scripts/release.js"
   },
   "dependencies": {
-    "kuai-ts": "^0.2.1-dev"
+    "kuai-ts": "0.2.1-dev"
   },
   "devDependencies": {
     "@types/node": "^24.0.13",
