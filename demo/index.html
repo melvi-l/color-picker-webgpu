@@ -62,8 +62,8 @@
         <canvas id="rgb-canvas" width="512" height="512"></canvas>
         <div id="luminance-slider"></div>
         <div class="color-info">
-            <div id=rgb-display class="color-display"></div>
-            <p id=rgb-value class="color-value">rgba(0,0,0,1.0)</p>
+            <div id="rgb-display" class="color-display"></div>
+            <p id="rgb-value" class="color-value">rgba(0,0,0,1.0)</p>
         </div>
     </div>
     <div class="hsl-container">
@@ -71,12 +71,12 @@
         <canvas id="hsl-canvas" width="512" height="512"></canvas>
         <div id="hue-slider"></div>
         <div class="color-info">
-            <div id=hsl-display class="color-display"></div>
-            <p id=hsl-value class="color-value">rgba(0,0,0,1.0)</p>
+            <div id="hsl-display" class="color-display"></div>
+            <p id="hsl-value" class="color-value">rgba(0,0,0,1.0)</p>
         </div>
     </div>
     <script type="module">
-        import "../dist/color-picker-webgpu.css"
+        import "../dist/style.css";
         import {
             RGBPicker,
             HSLPicker,
@@ -89,9 +89,9 @@
             width: 512,
             height: 512,
             onPick: ({r, g, b}) => {
-                const text = `rgba(${r}, ${g}, ${b}, 1)`
-                window["rgb-value"].textContent = text
-                window["rgb-display"].style.backgroundColor = text
+                const text = `rgba(${r}, ${g}, ${b}, 1)`;
+                window["rgb-value"].textContent = text;
+                window["rgb-display"].style.backgroundColor = text;
             },
             initialLuminance: 1,
         });
@@ -101,16 +101,14 @@
             onChange: rgbPicker.setLuminance,
         });
 
-
-
         const hslPicker = await HSLPicker({
             canvas: window["hsl-canvas"],
             width: 512,
             height: 512,
             onPick: ({r, g, b}) => {
-                const text = `rgba(${r}, ${g}, ${b}, 1)`
-                window["hsl-value"].textContent = text
-                window["hsl-display"].style.backgroundColor = text
+                const text = `rgba(${r}, ${g}, ${b}, 1)`;
+                window["hsl-value"].textContent = text;
+                window["hsl-display"].style.backgroundColor = text;
             },
             initialHue: 0,
         });
