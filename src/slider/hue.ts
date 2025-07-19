@@ -1,8 +1,13 @@
 import { hslToRgb } from "../utils/color";
 import { d } from "../utils/hyperscript";
-import { Indicator } from "../utils/indicator";
+import { Indicator, type IndicatorOptions } from "../utils/indicator";
 import { Interactor } from "../utils/interactor";
-
+export type HueSliderOptions = {
+  container?: HTMLElement;
+  initialHue?: number;
+  onChange?: (hue: number) => void;
+  indicatorOptions?: IndicatorOptions;
+};
 export function HueSlider(options: {
   container?: HTMLElement;
   initialHue?: number;
@@ -68,15 +73,17 @@ import { h } from "kuai-ts";
 
 import { K_Indicator } from "../utils/indicator";
 
-export function K_HueSlider(options: {
+export type K_HueSliderOptions = {
   initialHue?: number;
-  onChange: (hue: number) => void;
-}) {
-  const { initialHue = 1, onChange } = options;
+  onChange?: (hue: number) => void;
+  indicatorOptions?: IndicatorOptions;
+};
+export function K_HueSlider(options: K_HueSliderOptions) {
+  const { initialHue = 1, onChange, indicatorOptions } = options;
   const height = 32;
   const y = height / 2;
 
-  const indicator = K_Indicator();
+  const indicator = K_Indicator(indicatorOptions);
   const { setPosition, setColor } = indicator.instance;
 
   let setDomHue: (hue: number) => void;

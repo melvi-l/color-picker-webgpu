@@ -1,7 +1,16 @@
 import { d } from "./hyperscript";
 
-export function Indicator(options?: { size?: number; outlineWidth?: number }) {
-  const { size = 20, outlineWidth = 2 } = options ?? {};
+export type IndicatorOptions = {
+  size?: number;
+  outlineWidth?: number;
+  outlineColor: { r: number; g: number; b: number };
+};
+export function Indicator(options?: IndicatorOptions) {
+  const {
+    size = 20,
+    outlineWidth = 2,
+    outlineColor: { r, g, b } = { r: 255, g: 255, b: 255 },
+  } = options ?? {};
 
   const element = d("div", { className: "indicator" });
 
@@ -9,6 +18,8 @@ export function Indicator(options?: { size?: number; outlineWidth?: number }) {
   element.style.height = `${size}px`;
 
   element.style.outlineWidth = `${outlineWidth}px`;
+
+  element.style.outlineColor = `rgba(${r}, ${g}, ${b}, 1.0)`;
 
   let x = 0,
     y = 0;
@@ -18,8 +29,8 @@ export function Indicator(options?: { size?: number; outlineWidth?: number }) {
     x = position.x;
     y = position.y;
 
-    element.style.left = `${x - size / 2}px`;
-    element.style.top = `${y - size / 2}px`;
+    element.style.left = `${x - size / 2} px`;
+    element.style.top = `${y - size / 2} px`;
   }
   function getPosition() {
     return { x, y };
@@ -33,11 +44,12 @@ export function Indicator(options?: { size?: number; outlineWidth?: number }) {
 
 import { h } from "kuai-ts";
 
-export function K_Indicator(options?: {
-  size?: number;
-  outlineWidth?: number;
-}) {
-  const { size = 20, outlineWidth = 2 } = options ?? {};
+export function K_Indicator(options?: IndicatorOptions) {
+  const {
+    size = 20,
+    outlineWidth = 2,
+    outlineColor: { r, g, b } = { r: 255, g: 255, b: 255 },
+  } = options ?? {};
 
   let x = 0,
     y = 0;
@@ -46,17 +58,18 @@ export function K_Indicator(options?: {
   let setDomPosition: (position: { x: number; y: number }) => void;
   const vnode = h("div.indicator", {
     style: {
-      width: `${size}px`,
-      height: `${size}px`,
+      width: `${size} px`,
+      height: `${size} px`,
       outlineWidth: `${outlineWidth}px`,
+      outlineColor: `rgba(${r}, ${g}, ${b}, 1.0)`,
     },
     ref: (dom) => {
       setDomColor = ({ r, g, b }) => {
         dom.style.background = `rgb(${r}, ${g}, ${b})`;
       };
       setDomPosition = ({ x, y }) => {
-        dom.style.left = `${x - size / 2}px`;
-        dom.style.top = `${y - size / 2}px`;
+        dom.style.left = `${x - size / 2} px`;
+        dom.style.top = `${y - size / 2} px`;
       };
     },
   });

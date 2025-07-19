@@ -1,26 +1,33 @@
 import { hslRenderer } from "../renderer/hslRenderer";
 
-import { Indicator } from "../utils/indicator";
+import { Indicator, type IndicatorOptions } from "../utils/indicator";
 import { Interactor } from "../utils/interactor";
 import { d } from "../utils/hyperscript";
 import { hslToRgb } from "../utils/color";
 
 export interface HSLOptions {
-  canvas?: HTMLCanvasElement;
   width: number;
   height: number;
+  canvas?: HTMLCanvasElement;
+  indicatorOptions?: IndicatorOptions;
   onPick?: (color: { r: number; g: number; b: number }) => void;
   initialHue?: number;
 }
 
 export async function HSLPicker(options: HSLOptions) {
-  const { width, height, onPick, initialHue = 1.0 } = options;
+  const {
+    width,
+    height,
+    canvas = d("canvas", { width, height }),
+    indicatorOptions,
+    onPick,
+    initialHue = 1.0,
+  } = options;
 
-  const canvas = options.canvas ?? d("canvas", { width, height });
   canvas.width = width;
   canvas.height = height;
 
-  const indicator = Indicator();
+  const indicator = Indicator(indicatorOptions);
 
   const container = d("div", { className: "picker-container" });
 
@@ -83,17 +90,19 @@ import { h } from "kuai-ts";
 
 import { K_Indicator } from "../utils/indicator";
 
-export function K_HSLPicker(options: {
+export interface K_HSLOptions {
   width: number;
   height: number;
+  indicatorOptions?: IndicatorOptions;
   onPick?: (color: { r: number; g: number; b: number }) => void;
   initialHue?: number;
-}) {
-  const { width, height, onPick, initialHue = 0.0 } = options;
+}
+export function K_HSLPicker(options: K_HSLOptions) {
+  const { width, height, indicatorOptions, onPick, initialHue = 0.0 } = options;
 
   let hue: number;
 
-  const indicator = K_Indicator();
+  const indicator = K_Indicator(indicatorOptions);
   const { getPosition, setPosition, setColor } = indicator.instance;
 
   let sync: (luminance: number) => void;
