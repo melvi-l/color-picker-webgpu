@@ -24,10 +24,12 @@ export async function hslRenderer(canvas: HTMLCanvasElement) {
 
   const shaderModule = device.createShaderModule({
     code: `
-    struct Uniforms {
-      hue: f32, 
+    struct SizeUniform {
+        width: f32,
+        height: f32,
     };
-    @group(0) @binding(0) var<uniform> uniforms: Uniforms;
+    @group(0) @binding(0) var<uniform> u_size: SizeUniform;
+    @group(1) @binding(0) var<uniform> u_hue: f32;
 
     @vertex
     fn vs_main(@builtin(vertex_index) idx: u32) -> @builtin(position) vec4<f32> {
@@ -61,24 +63,28 @@ export async function hslRenderer(canvas: HTMLCanvasElement) {
 
     @fragment
     fn fs_main(@builtin(position) pos: vec4<f32>) -> @location(0) vec4<f32> {
-      let s = pos.x / 512.0;
-      let t = pos.y / 512.0;
+      let s = pos.x / u_size.width;
+      let t = pos.y / u_size.height;
 
       let lTop = (1.0 - s) * 1.0 + s * 0.5;
       let l = (1.0 - t) * lTop;
 
-      let rgb = hsl2rgb(uniforms.hue, s, l);
+      let rgb = hsl2rgb(u_hue, s, l);
       return vec4<f32>(rgb, 1.0);
     }
     `,
   });
 
-  const uniformBuffer = device.createBuffer({
-    size: 4,
+  const sizeBuffer = device.createBuffer({
+    size: 8,
     usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
   });
-
-  const bindGroupLayout = device.createBindGroupLayout({
+  device.queue.writeBuffer(
+    sizeBuffer,
+    0,
+    new Float32Array([canvas.width, canvas.height]),
+  );
+  const sizeBindGroupLayout = device.createBindGroupLayout({
     entries: [
       {
         binding: 0,
@@ -87,20 +93,42 @@ export async function hslRenderer(canvas: HTMLCanvasElement) {
       },
     ],
   });
-
-  const bindGroup = device.createBindGroup({
-    layout: bindGroupLayout,
+  const sizeBindGroup = device.createBindGroup({
+    layout: sizeBindGroupLayout,
     entries: [
       {
         binding: 0,
-        resource: { buffer: uniformBuffer },
+        resource: { buffer: sizeBuffer },
+      },
+    ],
+  });
+
+  const hueBuffer = device.createBuffer({
+    size: 4,
+    usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST,
+  });
+  const hueBindGroupLayout = device.createBindGroupLayout({
+    entries: [
+      {
+        binding: 0,
+        visibility: GPUShaderStage.FRAGMENT,
+        buffer: { type: "uniform" },
+      },
+    ],
+  });
+  const hueBindGroup = device.createBindGroup({
+    layout: hueBindGroupLayout,
+    entries: [
+      {
+        binding: 0,
+        resource: { buffer: hueBuffer },
       },
     ],
   });
 
   const pipeline = device.createRenderPipeline({
     layout: device.createPipelineLayout({
-      bindGroupLayouts: [bindGroupLayout],
+      bindGroupLayouts: [sizeBindGroupLayout, hueBindGroupLayout],
     }),
     vertex: {
       module: shaderModule,
@@ -108,7 +136,6 @@ export async function hslRenderer(canvas: HTMLCanvasElement) {
       buffers: [
         {
           arrayStride: 8,
-
           attributes: [{ shaderLocation: 0, format: "float32x2", offset: 0 }],
         },
       ],
@@ -122,8 +149,9 @@ export async function hslRenderer(canvas: HTMLCanvasElement) {
   });
 
   function sync(hue: number) {
-    device.queue.writeBuffer(uniformBuffer, 0, new Float32Array([hue]));
+    device.queue.writeBuffer(hueBuffer, 0, new Float32Array([hue]));
   }
+
   sync(0);
 
   function render() {
@@ -143,7 +171,8 @@ export async function hslRenderer(canvas: HTMLCanvasElement) {
 
     renderPass.setPipeline(pipeline);
     renderPass.setVertexBuffer(0, vertexBuffer);
-    renderPass.setBindGroup(0, bindGroup);
+    renderPass.setBindGroup(0, sizeBindGroup);
+    renderPass.setBindGroup(1, hueBindGroup);
     renderPass.draw(6);
     renderPass.end();
 
