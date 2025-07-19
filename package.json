@@ -1,6 +1,6 @@
 {
   "name": "color-picker-webgpu",
-  "version": "0.2.2-dev",
+  "version": "0.2.3-dev",
   "type": "module",
   "exports": {
     ".": {
@@ -8,7 +8,8 @@
       "import": "./dist/color-picker-webgpu.es.js",
       "require": "./dist/color-picker-webgpu.umd.js"
     },
-    "./type": "./dist/type.d.ts"
+    "./type": "./dist/type.d.ts",
+    "./style": "./dist/style.css"
   },
   "files": [
     "dist/",
