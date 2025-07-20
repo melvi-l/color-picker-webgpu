@@ -3,7 +3,7 @@ import { d } from "./hyperscript";
 export type IndicatorOptions = {
   size?: number;
   outlineWidth?: number;
-  outlineColor: { r: number; g: number; b: number };
+  outlineColor?: { r: number; g: number; b: number };
 };
 export function Indicator(options?: IndicatorOptions) {
   const {
@@ -58,8 +58,8 @@ export function K_Indicator(options?: IndicatorOptions) {
   let setDomPosition: (position: { x: number; y: number }) => void;
   const vnode = h("div.indicator", {
     style: {
-      width: `${size} px`,
-      height: `${size} px`,
+      width: `${size}px`,
+      height: `${size}px`,
       outlineWidth: `${outlineWidth}px`,
       outlineColor: `rgba(${r}, ${g}, ${b}, 1.0)`,
     },
